@@ -1,0 +1,234 @@
+{
+  "migration_id": "MIG-20261120-133355",
+  "generated_at": "2026-11-20T13:33:55+00:00",
+  "legacy_rules_file": "legacy_rules.txt",
+  "rules": {
+    "R-USER": {
+      "entity": "user",
+      "decision": "migrated",
+      "reason": "无重复源字段冲突，v2 与旧解析生效映射一致，可直接切换",
+      "legacy_expression": "crm_id->user_id, full_name->user_name, email->contact_email",
+      "collapsed": [],
+      "switch_conditions": [],
+      "active_version": 1,
+      "version_stack": [],
+      "contracts": {
+        "v1": "contracts/R-USER/v1.json",
+        "v2": "contracts/R-USER/v2.json"
+      }
+    },
+    "R-ORDER": {
+      "entity": "order",
+      "decision": "switch_ready",
+      "reason": "旧解析折叠了 order_no->order_id（交付依据：D-2024-002）；折叠有历史交付依据，v2 恢复的新字段定义已验证，可切换启用",
+      "legacy_expression": "order_no->order_id, order_no->order_code, amount->order_amount",
+      "collapsed": [
+        {
+          "source": "order_no",
+          "dropped_target": "order_id",
+          "surviving_target": "order_code",
+          "delivery_evidence": [
+            "D-2024-002"
+          ]
+        }
+      ],
+      "switch_conditions": [],
+      "active_version": 1,
+      "version_stack": [],
+      "contracts": {
+        "v1": "contracts/R-ORDER/v1.json",
+        "v2": "contracts/R-ORDER/v2.json"
+      }
+    },
+    "R-LOG": {
+      "entity": "device_log",
+      "decision": "stays_legacy",
+      "reason": "旧解析折叠了 dev_id->device_id；被折叠的映射没有历史交付依据，新字段定义不能启用，规则留在旧路径（v1）",
+      "legacy_expression": "dev_id->device_id, dev_id->dev_uuid, ts->event_ts",
+      "collapsed": [
+        {
+          "source": "dev_id",
+          "dropped_target": "device_id",
+          "surviving_target": "dev_uuid",
+          "delivery_evidence": []
+        }
+      ],
+      "switch_conditions": [
+        "字段 device_id（dev_id->device_id）需先完成一次验证交付作为交付依据，才允许写入交付文件"
+      ],
+      "active_version": 1,
+      "version_stack": [],
+      "contracts": {
+        "v1": "contracts/R-LOG/v1.json",
+        "v2": "contracts/R-LOG/v2.json"
+      }
+    }
+  },
+  "version_usage": [
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-USER",
+      "action": "run",
+      "version": 1,
+      "delivery_id": "replay-D-2024-001",
+      "delivery_file": "deliveries/replay-D-2024-001.csv",
+      "rows": 2,
+      "fields_written": [
+        "user_id",
+        "user_name",
+        "contact_email"
+      ],
+      "fields_suppressed": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-ORDER",
+      "action": "run",
+      "version": 1,
+      "delivery_id": "replay-D-2024-101",
+      "delivery_file": "deliveries/replay-D-2024-101.csv",
+      "rows": 1,
+      "fields_written": [
+        "order_code",
+        "order_amount"
+      ],
+      "fields_suppressed": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-LOG",
+      "action": "run",
+      "version": 1,
+      "delivery_id": "replay-D-2024-003",
+      "delivery_file": "deliveries/replay-D-2024-003.csv",
+      "rows": 2,
+      "fields_written": [
+        "dev_uuid",
+        "event_ts"
+      ],
+      "fields_suppressed": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-ORDER",
+      "action": "switch",
+      "from_version": 1,
+      "to_version": 2,
+      "suppressed_fields": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-ORDER",
+      "action": "run",
+      "version": 2,
+      "delivery_id": "D-2026-901",
+      "delivery_file": "deliveries/D-2026-901.csv",
+      "rows": 1,
+      "fields_written": [
+        "order_id",
+        "order_code",
+        "order_amount"
+      ],
+      "fields_suppressed": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-ORDER",
+      "action": "rollback",
+      "from_version": 2,
+      "to_version": 1
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-ORDER",
+      "action": "run",
+      "version": 2,
+      "delivery_id": "D-2026-902",
+      "delivery_file": "deliveries/D-2026-902.csv",
+      "rows": 1,
+      "fields_written": [
+        "order_id",
+        "order_code",
+        "order_amount"
+      ],
+      "fields_suppressed": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-ORDER",
+      "action": "run",
+      "version": 1,
+      "delivery_id": "D-2026-903",
+      "delivery_file": "deliveries/D-2026-903.csv",
+      "rows": 1,
+      "fields_written": [
+        "order_code",
+        "order_amount"
+      ],
+      "fields_suppressed": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-LOG",
+      "action": "switch",
+      "from_version": 1,
+      "to_version": 2,
+      "suppressed_fields": [
+        "device_id"
+      ]
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-LOG",
+      "action": "run",
+      "version": 2,
+      "delivery_id": "D-2026-904",
+      "delivery_file": "deliveries/D-2026-904.csv",
+      "rows": 1,
+      "fields_written": [
+        "dev_uuid",
+        "event_ts"
+      ],
+      "fields_suppressed": [
+        "device_id"
+      ]
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-LOG",
+      "action": "rollback",
+      "from_version": 2,
+      "to_version": 1
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-USER",
+      "action": "switch",
+      "from_version": 1,
+      "to_version": 2,
+      "suppressed_fields": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-USER",
+      "action": "run",
+      "version": 2,
+      "delivery_id": "D-2026-905",
+      "delivery_file": "deliveries/D-2026-905.csv",
+      "rows": 1,
+      "fields_written": [
+        "user_id",
+        "user_name",
+        "contact_email"
+      ],
+      "fields_suppressed": []
+    },
+    {
+      "at": "2026-11-20T13:33:55+00:00",
+      "rule_id": "R-USER",
+      "action": "rollback",
+      "from_version": 2,
+      "to_version": 1
+    }
+  ]
+}

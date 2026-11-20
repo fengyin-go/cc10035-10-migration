@@ -1,0 +1,36 @@
+{
+  "rule_id": "R-LOG",
+  "entity": "device_log",
+  "source_expression": "dev_id->device_id, dev_id->dev_uuid, ts->event_ts",
+  "generated_at": "2026-11-20T13:33:55+00:00",
+  "created_by": "contract-migration",
+  "contract_version": 2,
+  "supersedes": 1,
+  "mappings": [
+    {
+      "source": "dev_id",
+      "target": "device_id",
+      "origin": "restored",
+      "validated": false,
+      "delivery_evidence": []
+    },
+    {
+      "source": "dev_id",
+      "target": "dev_uuid",
+      "origin": "legacy_collapsed",
+      "validated": true,
+      "delivery_evidence": [
+        "D-2024-003"
+      ]
+    },
+    {
+      "source": "ts",
+      "target": "event_ts",
+      "origin": "legacy",
+      "validated": true,
+      "delivery_evidence": [
+        "D-2024-003"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "rule_id": "R-USER",
+  "entity": "user",
+  "source_expression": "crm_id->user_id, full_name->user_name, email->contact_email",
+  "generated_at": "2026-11-20T13:33:55+00:00",
+  "created_by": "contract-migration",
+  "contract_version": 1,
+  "supersedes": null,
+  "mappings": [
+    {
+      "source": "crm_id",
+      "target": "user_id",
+      "origin": "legacy",
+      "validated": true,
+      "delivery_evidence": [
+        "D-2024-001"
+      ]
+    },
+    {
+      "source": "full_name",
+      "target": "user_name",
+      "origin": "legacy",
+      "validated": true,
+      "delivery_evidence": [
+        "D-2024-001"
+      ]
+    },
+    {
+      "source": "email",
+      "target": "contact_email",
+      "origin": "legacy",
+      "validated": true,
+      "delivery_evidence": [
+        "D-2024-001"
+      ]
+    }
+  ]
+}

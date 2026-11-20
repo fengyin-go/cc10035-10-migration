@@ -77,5 +77,19 @@ npm run dev
 - 列表接口统一返回 `{ items, total, page, size }`，动作接口统一返回 `{ ok, message }`。
 - 状态流转只允许在 `app/services` 里改，路由层不做业务判断。
 
+## 契约迁移（Schema对齐 → 版本化实体对齐契约数据集）
+
+存量逗号/箭头字段映射可迁移为版本化契约数据集，输出目标按契约版本分发：
+
+- `app/services/schema_align.py`：`parse_field_mapping_detailed` 保留旧解析的
+  折叠语义并记录被折叠项；`ContractMigrationService` 生成 v1（旧解析生效映射）
+  与 v2（恢复被折叠字段定义）两版契约和迁移清单。被折叠字段有历史交付依据才
+  标记已验证，否则规则留在旧路径并记录切换条件。
+- `app/services/output_target.py`：`ContractDistributionService` 消费契约数据集，
+  `begin_run` 钉住单一版本，`switch_version`/`rollback` 切换与回滚，
+  未验证字段不写入交付文件，版本使用结果回写迁移清单。
+- 数据与清单在 `backend/dev_env/`；场景复现：
+  `cd backend && python3 scripts/run_contract_migration.py`
+
 领域：数据工程
 子方向：数据采集、爬虫与RPA

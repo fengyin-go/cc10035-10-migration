@@ -1,0 +1,30 @@
+{
+  "rule_id": "R-ORDER",
+  "entity": "order",
+  "source_expression": "order_no->order_id, order_no->order_code, amount->order_amount",
+  "generated_at": "2026-11-20T13:33:55+00:00",
+  "created_by": "contract-migration",
+  "contract_version": 1,
+  "supersedes": null,
+  "mappings": [
+    {
+      "source": "order_no",
+      "target": "order_code",
+      "origin": "legacy_collapsed",
+      "validated": true,
+      "delivery_evidence": [
+        "D-2024-101"
+      ]
+    },
+    {
+      "source": "amount",
+      "target": "order_amount",
+      "origin": "legacy",
+      "validated": true,
+      "delivery_evidence": [
+        "D-2024-002",
+        "D-2024-101"
+      ]
+    }
+  ]
+}

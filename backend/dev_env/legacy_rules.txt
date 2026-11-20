@@ -1,0 +1,5 @@
+# 存量Schema对齐规则导出：规则ID | 实体 | 字段映射（旧格式：源->目标，逗号分隔）
+# 旧解析把表达式折叠成 dict：同一源字段重复出现时只保留最后一项。
+R-USER | user | crm_id->user_id, full_name->user_name, email->contact_email
+R-ORDER | order | order_no->order_id, order_no->order_code, amount->order_amount
+R-LOG | device_log | dev_id->device_id, dev_id->dev_uuid, ts->event_ts

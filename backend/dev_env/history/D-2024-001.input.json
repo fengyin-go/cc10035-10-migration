@@ -1,0 +1,4 @@
+[
+  {"crm_id": "C-1001", "full_name": "Ada Lovelace", "email": "ada@example.com"},
+  {"crm_id": "C-1002", "full_name": "Alan Turing", "email": "alan@example.com"}
+]
